@@ -1,0 +1,44 @@
+# SpringBoot读取配置文件顺序：
+# bootstrap.yml>bootstrap.yaml>bootstrap.properties>nacos的配置>application.yml>application.yaml>application.properties
+spring:
+  profiles:
+    active: dev
+  cloud:
+    #服务注册和发现
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848
+        service: ${spring.application.name}
+        group: hello-world-${spring.profiles.active}
+      config:
+        group: hello-world-${spring.profiles.active}
+        server-addr: 127.0.0.1:8848
+        file-extension: yml
+        shared-configs:
+          - data-id: global-config.yml
+            group: hello-world-${spring.profiles.active}
+            refresh: true
+# 阿里云日志采集
+aliyun:
+  log:
+    endpoint: cn-shenzhen-intranet.log.aliyuncs.com
+    accessKeyId: LTAIGoTOFSRYbut6
+    accessKeySecret: QvWE3MUn8UykAH0aKIM8UIo7adlOkR
+    project: hello-world
+    logStore: ${spring.application.name}-
+    totalSizeInBytes: 104857600
+    maxBlockMs: 0
+    ioThreadCount: 8
+    batchSizeThresholdInBytes: 524288
+    batchCountThreshold: 4096
+    lingerMs: 2000
+    retries: 3
+    baseRetryBackoffMs: 100
+    maxRetryBackoffMs: 5000
+    timeFormat: yyyy-MM-dd'T'HH:mmZ
+    timeZone: Asia/Shanghai
+
+
+
+
+

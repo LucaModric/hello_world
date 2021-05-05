@@ -1,0 +1,78 @@
+server:
+  port: 80
+spring:
+  zipkin:
+    base-url:  http://zipkin.develop:9411
+    locator:
+      discovery:
+        enabled: true
+    enabled: true
+    discovery-client-enabled: false
+    service:
+      name: ${spring.application.name}
+    sender:
+      # 设置使用http的方式传输数据
+      type:  web
+  sleuth:
+    sampler:
+      # 抽样率，默认是0.1（90%的数据会被丢弃）这边为了测试方便，将其设置为1.0，即所有的数据都会上报给zipkin
+      probability: 1.0
+  redis:
+    database: 13
+    timeout: 30000
+    host: redis-test.maliujia
+    port: 6379
+    password: uoK8nE9wwkhiISCN
+    max-active: 500
+    max-wait: 20000
+    min-idle: 0
+    max-idle: 8
+  # 数据源配置
+  datasource:
+    #serverTimezone=GMT%2b8 mysql8.0解决时区问题
+    url: jdbc:mysql://mysql-test.maliujia:3306/app?useUnicode=true&&autoReconnect=true&failOverReadOnly=false&characterEncoding=utf8&serverTimezone=GMT%2b8
+    username: root
+    password: Rnu96YsSmh0gDUnu
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      connection-test-query: SELECT 1 FROM DUAL
+      connection-timeout: 60000
+      maximum-pool-size: 50
+      max-lifetime: 1800000
+      minimum-idle: 10
+      idle-timeout: 600000
+      connectionInitSql: set names utf8mb4
+      driver-class-name: ${spring.datasource.driver-class-name}
+      username: ${spring.datasource.username}
+      password: ${spring.datasource.password}
+      jdbc-url: ${spring.datasource.url}
+      auto-commit: true
+    #
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+        # spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+      open-in-view: false
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+# feign超时时间设置
+feign:
+  client:
+    config:
+      default:
+        connectTimeout: 60000
+        readTimeout: 60000
+# mybatis 日志打印级别
+log4j:
+  logger:
+    com:
+      mybatis:
+        sqlmap:
+          engine:
+            impl:
+              SqlMapClientDelegate: DEBUG
