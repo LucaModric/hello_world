@@ -9,9 +9,9 @@ spring:
       discovery:
         server-addr: nacos-test:80
         service: ${spring.application.name}
-        group: hello-world-prod
+        group: hello-world-${spring.profiles.active}
       config:
-        group: hello-world-prod
+        group: hello-world-${spring.profiles.active}
         server-addr: nacos-test:80
         file-extension: yml
         shared-configs:
